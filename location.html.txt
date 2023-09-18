@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Localização</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Verifica se a permissão já foi concedida anteriormente
+            if (localStorage.getItem('locationPermission') === 'granted') {
+                fetchLocation();
+            } else {
+                askForLocation();
+            }
+        });
+
+        function askForLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    // Armazene a decisão no localStorage
+                    localStorage.setItem('locationPermission', 'granted');
+                    sendLocation(position);
+                }, function(error) {
+                    localStorage.setItem('locationPermission', 'denied');
+                    alert("Erro ao obter localização. Por favor, conceda permissão.");
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function fetchLocation() {
+            navigator.geolocation.getCurrentPosition(sendLocation);
+        }
+
+        function sendLocation(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            // Aqui você pode enviar a latitude e longitude para um servidor
+            alert(`Latitude: ${lat}, Longitude: ${lon}`);
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
